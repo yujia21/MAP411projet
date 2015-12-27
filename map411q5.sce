@@ -50,12 +50,14 @@ if (prest>=0) then //condition CFL satisfait
         if (modulo(n,10)==0)//display only each 100th step
             //sol explicite
 
-            sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt)*Npart/2; //n*dt=t is time step
+            sol = (1-cos(2*%pi*(V*n*dt-xx))*exp(-4*%pi^2*D*n*dt))*exp(-alpha*n*dt)*Npart/2; //n*dt=t is time step
         
         
             drawlater() ; 
             clf ; 
+            subplot(2,1,1);
             plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
+            subplot(2,1,2);
             plot2d(xx,sol,rect=[0,0,1,Npart],style=5);
             drawnow();
             disp("Time: ");
