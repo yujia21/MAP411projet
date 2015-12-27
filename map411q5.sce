@@ -47,7 +47,7 @@ if (prest>=0) then //condition CFL satisfait
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
         
-        if (modulo(n,100)==0)//display only each 100th step
+        if (modulo(n,10)==0)//display only each 100th step
             //sol explicite
 
             sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt)*Npart/2; //n*dt=t is time step
@@ -60,6 +60,9 @@ if (prest>=0) then //condition CFL satisfait
             drawnow();
             disp("Time: ");
             disp(n);
+            if (n<100)
+                halt;
+            end
         end
     end
 else 
