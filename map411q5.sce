@@ -1,11 +1,11 @@
-Npart = 100;
+Npart = 1;
 
 //space spacing
 J = 50 ; dx = 1.0/J ; 
 xx = linspace(dx,1,J) ; //useful for plotting
 
 //time spacing
-T = 10 ; dt = 0.0001; 
+T = 1 ; dt = 0.0001; 
 Niter = T/dt ; 
 
 //initial conditions
@@ -47,8 +47,9 @@ if (prest>=0) then
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
         
-        if (modulo(n,1000)==0)//display only each 1000th step
+        if (modulo(n,100)==0)//display only each 100th step
             //sol explicite
+
             sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt)*Npart/2; //n*dt=t is time step
         
         
@@ -59,6 +60,9 @@ if (prest>=0) then
             drawnow();
             disp("Time: ");
             disp(n);
+            if (n<2000)
+                halt;
+            end
         end
     end
 else 
