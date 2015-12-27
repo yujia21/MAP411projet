@@ -45,16 +45,20 @@ if (prest>=0) then
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
         
+        //sol explicite
+        sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt); //n*dt=t is time step
+        
         if (modulo(n,100)==0)//display only each 100th step
             drawlater() ; 
             clf ; 
             plot2d(xx,uu,rect=[0,0,1,2]) ; 
+            plot2d(xx,sol,rect=[0,0,1,2],style=5);
             drawnow();
             disp("Time: ");
             disp(n);
         end
     end
-
 else 
     disp("Erreur : P(j)<0!")
 end
+
