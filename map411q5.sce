@@ -38,7 +38,7 @@ disp (pplus);
 disp ("P(j) = ");
 disp (prest);
 
-if (prest>=0) then
+if (prest>=0) then //condition CFL satisfait
     //Shifters
     iiL = [2:J 1] ; //shifts left so is the part coming from right
     iiR = [J 1:J-1] ; 
@@ -60,12 +60,9 @@ if (prest>=0) then
             drawnow();
             disp("Time: ");
             disp(n);
-            if (n<2000)
-                halt;
-            end
         end
     end
 else 
-    disp("Erreur : P(j)<0!")
+    disp("Erreur : P(j)<0, condition CFL pas satisfait!")
 end
 
