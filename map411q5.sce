@@ -45,7 +45,7 @@ if (prest>=0) then
     
     //for each step in time
     for n = 1:Niter;
-        uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
+        uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
         
         if (modulo(n,100)==0)//display only each 100th step
             //sol explicite

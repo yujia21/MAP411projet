@@ -43,7 +43,7 @@ if (prest>=0) then
     
     //for each step in time
     for n = 1:Niter
-        uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
+        uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
 
         //conditions aux bords
         uu(1,1) = 0;

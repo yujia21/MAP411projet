@@ -38,7 +38,7 @@ iiR = [J 1:J-1] ;
 //for each step in time
 for n = 1:Niter
     drawlater();
-    uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
+    uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
     clf;
     plot2d(xx,uu0,rect=[0,0,1,Npart], style = 5) ; 
     plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
