@@ -1,3 +1,5 @@
+Npart = 5; //# of particules
+
 //space spacing
 J = 50 ; dx = 1.0/J ; 
 xx = linspace(dx,1,J) ; //useful for plotting
@@ -7,7 +9,8 @@ T = 1 ; dt = 0.02;
 Niter = T/dt ; 
 
 //initial conditions
-uu0 = 1-cos(2*%pi*xx) ; //int distribution
+uu0 = rand(1,J) .* xx * Npart;
+//uu0 = 1-cos(2*%pi*xx) ; //int distribution
 uu = uu0 ; 
 
 // probabilities
@@ -37,7 +40,8 @@ for n = 1:Niter
     drawlater();
     uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
     clf;
-    plot2d(xx,uu,rect=[0,0,1,2]) ; 
+    plot2d(xx,uu0,rect=[0,0,1,Npart], style = 5) ; 
+    plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
 //    halt('Press a key') ; 
     drawnow();
 end

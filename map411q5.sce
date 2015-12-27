@@ -1,13 +1,15 @@
+Npart = 100;
+
 //space spacing
 J = 50 ; dx = 1.0/J ; 
 xx = linspace(dx,1,J) ; //useful for plotting
 
 //time spacing
-T = 1 ; dt = 0.0001; 
+T = 10 ; dt = 0.0001; 
 Niter = T/dt ; 
 
 //initial conditions
-uu0 = 1-cos(2*%pi*xx) ; //int distribution
+uu0 = (1-cos(2*%pi*xx))*Npart/2 //int distribution
 uu = uu0 ; 
 
 // probabilities
@@ -45,14 +47,15 @@ if (prest>=0) then
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL)-pdest*uu;
         
-        //sol explicite
-        sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt); //n*dt=t is time step
+        if (modulo(n,1000)==0)//display only each 1000th step
+            //sol explicite
+            sol = (1-cos(2*%pi*(V*n*dt-xx)))*(%e)^(-alpha*n*dt)*Npart/2; //n*dt=t is time step
         
-        if (modulo(n,100)==0)//display only each 100th step
+        
             drawlater() ; 
             clf ; 
-            plot2d(xx,uu,rect=[0,0,1,2]) ; 
-            plot2d(xx,sol,rect=[0,0,1,2],style=5);
+            plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
+            plot2d(xx,sol,rect=[0,0,1,Npart],style=5);
             drawnow();
             disp("Time: ");
             disp(n);
