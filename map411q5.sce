@@ -1,4 +1,4 @@
-Npart = 1;
+Npart = 2;
 
 //space spacing
 J = 50 ; dx = 1.0/J ; 
@@ -60,11 +60,16 @@ if (prest>=0) then //condition CFL satisfait
             drawnow();
             disp("Time: ");
             disp(n);
+            disp ("Erreur: ")
+            difference(1,n) = max(abs(sol-uu));
+            disp (difference(1,n));
             if (n<100)
                 halt;
             end
         end
     end
+    disp ("Max Erreur: ")
+    disp(max(difference));
 else 
     disp("Erreur : P(j)<0, condition CFL pas satisfait!")
 end
