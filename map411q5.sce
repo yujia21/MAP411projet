@@ -46,24 +46,28 @@ if (prest>=0) then //condition CFL satisfait
     //for each step in time
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
-        
+        if (n>2000)
+            break
+        end
         if (modulo(n,10)==0)//display only each 100th step
             //sol explicite
 
             sol = (1-cos(2*%pi*(V*n*dt-xx))*exp(-4*%pi^2*D*n*dt))*exp(-alpha*n*dt)*Npart/2; //n*dt=t is time step
             drawlater() ; 
             clf ; 
-            subplot(2,1,1);
+            subplot(2,2,1);
             plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
-            subplot(2,1,2);
+            subplot(2,2,2);
             plot2d(xx,sol,rect=[0,0,1,Npart],style=5);
+            subplot(2,2,3);
+            plot2d(xx,abs(uu-sol),rect=[0,0,1,0.005],style=3);
             drawnow();
             disp("Time: ");
             disp(n);
             disp ("Erreur: ")
             difference(1,n) = max(abs(sol-uu));
             disp (difference(1,n));
-            if (n<100)
+            if (n<500 & n>200)
                 halt;
             end
         end
