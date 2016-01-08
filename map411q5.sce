@@ -1,7 +1,7 @@
-Npart = 2;
+Npart = 1;
 
 //space spacing
-J = 50 ; dx = 1.0/J ; 
+J = 1/50 ; dx = 1/J ; 
 xx = linspace(dx,1,J) ; //useful for plotting
 
 //time spacing
@@ -53,27 +53,40 @@ if (prest>=0) then //condition CFL satisfait
             //sol explicite
 
             sol = (1-cos(2*%pi*(V*n*dt-xx))*exp(-4*%pi^2*D*n*dt))*exp(-alpha*n*dt)*Npart/2; //n*dt=t is time step
+            erreur=sol-uu;
             drawlater() ; 
             clf ; 
+
             subplot(2,2,1);
             plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
+            xtitle( 'Simulation', 'Espace', 'Probabilité' ) ;
+
             subplot(2,2,2);
             plot2d(xx,sol,rect=[0,0,1,Npart],style=5);
+            xtitle( 'Solution', 'Espace', 'Probabilité' ) ;
+            
             subplot(2,2,3);
-            plot2d(xx,abs(uu-sol),rect=[0,0,1,0.005],style=3);
+            plot2d(xx,(erreur),rect=[0,-0.005,1,0.005],style=3);
+            xtitle( 'Erreur', 'Espace', 'Difference en Probabilité' ) ;
+
+            borne = ones(xx)*(dx*dx*10+dt*dt);
+            plot2d(xx,borne,rect=[0,-0.005,1,0.005],style=2);
+
             drawnow();
+
             disp("Time: ");
             disp(n);
-            disp ("Erreur: ")
-            difference(1,n) = max(abs(sol-uu));
-            disp (difference(1,n));
-            if (n<500 & n>200)
-                halt;
-            end
+
+            differencelinf(1,n) = norm(erreur,'inf');
+            differencel2(1,n)=norm(erreur,2);
         end
     end
-    disp ("Max Erreur: ")
-    disp(max(difference));
+    
+    disp ("Max Linf Erreur: ")
+    disp(max(differencelinf));
+    disp ("Max L2 Erreur: ")
+    disp(max(differencel2));
+
 else 
     disp("Erreur : P(j)<0, condition CFL pas satisfait!")
 end
