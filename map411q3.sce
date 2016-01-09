@@ -1,27 +1,38 @@
-Npart = 5; //# of particules
+Npart = 1; //# de particules
 
-//space spacing
+// Espace
 J = 50 ; dx = 1.0/J ; 
-xx = linspace(dx,1,J) ; //useful for plotting
+xx = linspace(dx,1,J) ; //pour la graphe
 
-//time spacing
+// Temps
 T = 1 ; dt = 0.02; 
 Niter = T/dt ; 
 
-//initial conditions
-uu0 = rand(1,J) .* xx * Npart;
-//uu0 = 1-cos(2*%pi*xx) ; //int distribution
+// Les conditions initiales
+// Pour avoir une densité de probabilité, on enforce une normalization
+// de la distribution initiale.
+
+disint = ones(1,J).*rand(1,J);//une distribution random
+//disint = ones(1,J); //une distribution uniforme
+//disint = 1-cos(2*%pi*xx); //la distribution initiale pour question 4
+
+normalize = sum(disint);
+uu0 = disint/normalize * Npart; 
+
 uu = uu0 ; 
 
-// probabilities
+// Les probabilités
+// Ici on fixe les probabilités et calcule les coefficients.
+// Mais si on a les coefficients, on peut calculer
+// les probabilités à partir de là.
 pdest = 0.1; //destruction
-pplus =  0.4; //goes to j+1
-pminus = 0.2; //goes to j-1
-prest = 1-pdest-pplus-pminus;  //stays at j
+pplus =  0.4; //la particule va à j+1
+pminus = 0.2; //la particule va à j-1
+prest = 1-pdest-pplus-pminus;  //la particule reste à j
 
-alpha = pdest/dt; //coeff destruction
-D = pminus * dx * dx / dt; //coeff diffusion
-V = pplus-pminus * dx / dt; //coeff advection
+alpha = pdest/dt; //coefficient de destruction
+D = pminus * dx * dx / dt; //coefficient de diffusion
+V = pplus-pminus * dx / dt; //coefficient d'advection
 
 disp ("alpha = ");
 disp (alpha);
@@ -30,18 +41,19 @@ disp (D);
 disp ("V = ");
 disp (V);
 
-
-//Shifters
-iiL = [2:J 1] ; //shifts left so is the part coming from right
+//Shift
+iiL = [2:J 1] ; //shift à gauche
 iiR = [J 1:J-1] ; 
 
-//for each step in time
+//Pour chaque pas de temps
 for n = 1:Niter
     drawlater();
     uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
     clf;
-    plot2d(xx,uu0,rect=[0,0,1,Npart], style = 5) ; 
-    plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
-//    halt('Press a key') ; 
+    // La distribution initiales en rouge
+    plot2d(xx,uu0,rect=[0,0,1,Npart/10], style = 5) ; 
+    
+    // La simulation en noir
+    plot2d(xx,uu,rect=[0,0,1,Npart/10]) ; 
     drawnow();
 end
