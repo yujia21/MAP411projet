@@ -1,16 +1,21 @@
+//Question 3, 5, et 6
 clear;
-Npart = 1;
-
 //espace
-J = 50 ; dx = 1/J ; 
+J = 50 ; dx = 1.0/J ; 
 xx = linspace(dx,1,J) ; //pour la graphe
 
 //temps
 T = 1 ; dt = 0.0001; 
 Niter = T/dt ; 
 
-//les conditions initiales
-uu0 = (1-cos(2*%pi*xx))*Npart/2 //la distribution initiale
+//La Distribution Initiale
+// Si on utilise les deux distributions suivants, ne trace pas 
+// la solution exacte et les erreurs (lignes 79-96)
+
+//uu0 = ones(1,J).*rand(1,J);//une distribution random
+//uu0 = ones(1,J); //une distribution uniforme
+
+uu0 = (1-cos(2*%pi*xx)) //la distribution initiale de question 4
 uu = uu0 ; 
 
 // Les coefficients
@@ -49,12 +54,18 @@ if (prest>=0) then //Si la condition CFL est satisfait
     for n = 1:Niter;
         uu = prest*uu + pplus*uu(iiR)+pminus*uu(iiL);
         
-        //La solution explicite
-        sol = (1-cos(2*%pi*(V*n*dt-xx))*exp(-4*%pi^2*D*n*dt))*exp(-alpha*n*dt)*Npart/2; //n*dt=t est un pas du temps
-            
+        // Question 4 et 5 : La solution explicite
+        // n*dt=t est un pas du temps
+        sol = (1-cos(2*%pi*(V*n*dt-xx))*exp(-4*%pi^2*D*n*dt))*exp(-alpha*n*dt); 
         erreur=sol-uu;
         differencelinf(1,n) = norm(erreur,'inf'); 
         differencel2(1,n)=norm(erreur,2); 
+        
+        //Question 6: decommenter pour les conditions aux bords
+        //Ensuite, mets en commentaire la solution explicite, 
+        //l'erreur et les lignes 79-96
+        //uu(1,1) = 0;
+        //uu(J) = uu(J-1);
 
         //On trace la graphe pour chaque 10eme pas
         if (modulo(n,10)==0)
@@ -62,30 +73,29 @@ if (prest>=0) then //Si la condition CFL est satisfait
             clf ; 
 
             subplot(2,2,1);
-            plot2d(xx,uu,rect=[0,0,1,Npart]) ; 
-            xtitle( 'Simulation', 'Espace', 'Probabilité' ) ;
+            plot2d(xx,uu,rect=[0,0,1,2]) ; 
+            xtitle( 'Simulation', 'Espace', 'Probabilité Densité' ) ;
 
             subplot(2,2,2);
-            plot2d(xx,sol,rect=[0,0,1,Npart],style=5);
-            xtitle( 'Solution', 'Espace', 'Probabilité' ) ;
+            plot2d(xx,sol,rect=[0,0,1,2],style=5);
+            xtitle( 'Solution', 'Espace', 'Probabilité Densité' ) ;
             
             //Trace d'erreur : 
             // En bleu : l'erreur absolu, 
             // En vert: maximum atteint pour la norme
             subplot(2,2,3);
-            plot2d(xx,erreur,rect=[0,0,1,0.002*Npart],style=2);
-            plot2d(xx,ones(1,J)*max(differencelinf),rect=[0,0,1,0.002*Npart],style=3);
-            xtitle( 'Erreur avec Linf borne', 'Espace', 'Probabilité' ) ;
+            plot2d(xx,erreur,rect=[0,0,1,0.004],style=2);
+            plot2d(xx,ones(1,J)*max(differencelinf),rect=[0,0,1,0.002],style=3);
+            h1=legend(['Erreur Absolu', 'Max(Linf norme)'],1);
+            xtitle( 'Erreur avec Linf borne', 'Espace', 'Probabilité Densité' ) ;
 
             subplot(2,2,4);
-            plot2d(xx,erreur,rect=[0,0,1,0.002*Npart],style=2);
-            plot2d(xx,ones(1,J)*max(differencel2),rect=[0,0,1,0.01*Npart],style=3);
-            xtitle( 'Erreur avec L2 borne', 'Espace', 'Probabilité' ) ;
+            plot2d(xx,erreur,rect=[0,0,1,0.02],style=2);
+            plot2d(xx,ones(1,J)*max(differencel2),rect=[0,0,1,0.01],style=3);
+            h1=legend(['Erreur Absolu', 'Max(L2 norme)'],1);
+            xtitle( 'Erreur avec L2 borne', 'Espace', 'Probabilité Densité' ) ;
 
             drawnow();
-            if (n == 500)
-                halt;
-            end
         end
     end
     

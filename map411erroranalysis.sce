@@ -1,39 +1,34 @@
-Npart = 1;
-
 //time spacing
-T = 1 ; dt = 0.0000005; 
+T = 1 ; dt = 0.0000005; // dt à varier
 Niter = T/dt ; 
 
 //space spacing
-J = 60 ; dx = 1/J ;
-xx = linspace(dx,1,J) ; //useful for plotting
+J = 60 ; dx = 1/J ; // J à varier
+xx = linspace(dx,1,J) ;
 
-    // probabilities
-    alpha = 1; //coeff destruction
-    D = 1; //coeff diffusion
-    V = 1; //coeff advection
-    pdest = alpha*dt; //destruction
-    pminus = D*dt/dx/dx; //goes to j-1
-    pplus =  V*dt/dx+pminus; //goes to j+1
-    prest = 1-pdest-pplus-pminus;  //stays at j
+// probabilities
+alpha = 1; //coeff destruction
+D = 1; //coeff diffusion
+V = 1; //coeff advection
+pdest = alpha*dt; //destruction
+pminus = D*dt/dx/dx; //à j-1
+pplus =  V*dt/dx+pminus; //à  j+1
+prest = 1-pdest-pplus-pminus;  //à j
 
-
-
-rownumb=1;
+rownumb=1; // nombre de dt ou dx à tester
 while (prest>=0)//condition CFL satisfait
     if (rownumb >15)
         break
     end 
 
-    //initial conditions
-    uu0 = (1-cos(2*%pi*xx))*Npart/2 //int distribution
+    //distribution initiale
+    uu0 = (1-cos(2*%pi*xx))
     uu = uu0 ; 
   
     pdest = alpha*dt; //destruction
     pminus = D*dt/dx/dx; //goes to j-1
     pplus =  V*dt/dx+pminus; //goes to j+1
     prest = 1-pdest-pplus-pminus;  //stays at j
-
 
     //Shifters
     iiL = [2:J 1] ; //shifts left so is the part coming from right

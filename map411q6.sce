@@ -1,4 +1,6 @@
-//space spacing
+// Question 6
+clear;
+// espace
 J = 50 ; dx = 1.0/J ; 
 xx = linspace(dx,1,J) ; //useful for plotting
 
